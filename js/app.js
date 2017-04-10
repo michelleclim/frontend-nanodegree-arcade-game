@@ -23,9 +23,6 @@ Enemy.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
    this.x += this.speed;
-   if (this.x === player.x && this.y === player.y) {
-       player.reset();
-   }
 };
 
 // Draw the enemy on the screen, required method for game
@@ -40,6 +37,7 @@ var Player = function() {
     this.sprite = 'images/char-boy.png';
     this.x = 2 * xMult;
     this.y = 4 * yMult;
+    this.score = 0;
     this.reset = function() {
         this.x = 2 * xMult;
         this.y = 4 * yMult;
@@ -47,12 +45,13 @@ var Player = function() {
 }
 
 Player.prototype.update = function() {
-    // check if char position == enemy position
-    //loop through enemy array
     allEnemies.forEach(enemy => {
-        if (this.x == enemy.x && this.y == enemy.y) {
-            // reset player position
-            this.reset();
+        if (this.x - 80 < enemy.x &&
+            this.x + 80 > enemy.x &&
+            this.y == enemy.y) {
+                this.reset();
+                this.score = 0;
+                document.getElementById('score').innerHTML = this.score;
         }
     });
 }
@@ -85,7 +84,9 @@ Player.prototype.handleInput = function(input) {
             break;
     }
     if (this.y === 0) {
+        this.score++;
         this.reset();
+        document.getElementById('score').innerHTML = this.score;
     }
 }
 
